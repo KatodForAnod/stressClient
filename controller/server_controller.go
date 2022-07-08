@@ -17,7 +17,7 @@ func (c *Controller) Init() {
 func (c *Controller) AddIot(iotDevice iot.IoT) error {
 	log.Infoln("Controller AddIot", iotDevice.GetId())
 
-	if _, isExist := c.iotDevices[iotDevice.GetId()]; !isExist {
+	if _, isExist := c.iotDevices[iotDevice.GetId()]; isExist {
 		return errors.New("iot device already exist")
 	}
 
