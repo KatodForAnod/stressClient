@@ -17,8 +17,8 @@ func (s *Server) StartServer(config config.Config, controller controller.ServerC
 	s.controller = controller
 
 	r := mux.NewRouter()
-	r.HandleFunc("/device/{iot:[0-9]}/metrics/func1", s.getInformationFromIotDeviceFunc1)
+	r.HandleFunc("/device/{iot:[0-9]+}/metrics/func1", s.getInformationFromIotDeviceFunc1)
 
 	fmt.Println("Server is listening... ", config.ProxyServerAddr)
-	log.Fatal(http.ListenAndServe(config.ProxyServerAddr, nil))
+	log.Fatal(http.ListenAndServe(config.ProxyServerAddr, r))
 }
