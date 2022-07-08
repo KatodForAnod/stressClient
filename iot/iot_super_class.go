@@ -60,6 +60,10 @@ func (c *CommonIotDevice) GetCurrentStateFunc5() (string, error) {
 }
 
 func (c *CommonIotDevice) processFormula(formula string) (string, error) {
+	if formula == "" {
+		return "", errors.New("empty formula")
+	}
+
 	expression, err := govaluate.NewEvaluableExpression(formula)
 	if err != nil {
 		log.Error(err)
