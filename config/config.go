@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
+	"fmt"
 	"io/ioutil"
 )
 
@@ -33,8 +33,7 @@ var configPath = "conf.config"
 func LoadConfig() (loadedConf Config, err error) {
 	data, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Errorln(err)
-		return Config{}, err
+		return Config{}, fmt.Errorf("loadconfig err:%v", err)
 	}
 
 	err = json.Unmarshal(data, &loadedConf)

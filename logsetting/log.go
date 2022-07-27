@@ -1,7 +1,6 @@
 package logsetting
 
 import (
-	"errors"
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
@@ -34,8 +33,7 @@ func LogInit() error {
 func OpenLastLogFile() (*os.File, error) {
 	fileInfo, err := ioutil.ReadDir(dirName)
 	if err != nil {
-		log.Errorln(err)
-		return nil, err
+		return nil, fmt.Errorf("openlastlogfile err:%v", err)
 	}
 
 	sort.SliceStable(fileInfo, func(i, j int) bool {
@@ -43,15 +41,13 @@ func OpenLastLogFile() (*os.File, error) {
 	})
 
 	if len(fileInfo) == 0 {
-		err := errors.New("not found log files")
-		log.Errorln(err)
-		return nil, err
+		return nil, fmt.Errorf("not found log files")
 	}
 
 	file, err := os.Open(dirName + "/" + fileInfo[0].Name())
 	if err != nil {
-		log.Errorln(err)
-		return nil, err
+		return nil, fmt.Errorf("open file %s err:%v",
+			dirName+"/"+fileInfo[0].Name(), err)
 	}
 
 	return file, nil

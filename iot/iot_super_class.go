@@ -2,6 +2,7 @@ package iot
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Knetic/govaluate"
 	log "github.com/sirupsen/logrus"
 	"strconv"
@@ -66,8 +67,7 @@ func (c *CommonIotDevice) processFormula(formula string) (string, error) {
 
 	expression, err := govaluate.NewEvaluableExpression(formula)
 	if err != nil {
-		log.Error(err)
-		return "", err
+		return "", fmt.Errorf("govaluate err:%v", err)
 	}
 
 	c.baseNumber = c.baseNumber + c.step
@@ -76,14 +76,12 @@ func (c *CommonIotDevice) processFormula(formula string) (string, error) {
 
 	result, err := expression.Evaluate(parameters)
 	if err != nil {
-		log.Error(err)
-		return "", err
+		return "", fmt.Errorf("expressioan evaluate err:%v", err)
 	}
 
 	resultFloat, ok := result.(float64)
 	if !ok {
-		err := errors.New("formula returned not float")
-		return "", err
+		return "", fmt.Errorf("processFormula: formula returned not float")
 	}
 
 	resultStr := strconv.FormatFloat(resultFloat, 'f', -1, 64)
